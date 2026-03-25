@@ -16,7 +16,7 @@ A aplicação permite listar, criar, editar e excluir produtos, com filtros, bus
 #### Backend
 | Tecnologia | Versão | Motivo da Escolha |
 |---|---|---|
-| .NET | 8.0 | Requisito do desafio. LTS com melhorias significativas de performance |
+| .NET | 10.0 | Requisito do desafio. LTS com melhorias significativas de performance |
 | Entity Framework Core | 8.x | ORM maduro, Code First com Migrations — ideal para evolução controlada do schema |
 | SQLite | — | Banco embarcado, zero configuração, funciona em qualquer sistema operacional sem instalação adicional |
 | Data Annotations | — | Validações declarativas diretamente nas entidades — rápidas e legíveis |
