@@ -55,9 +55,9 @@ namespace AgileShop.Repositories //Deixei na ordem CRUD
 				productModel = productModel.Where(p => p.Category.ToLower().Contains(query.Category.ToLower()));
 			}
 
-			if (query.Disponibility.HasValue)
+			if (query.Availability.HasValue)
 			{
-				productModel = query.Disponibility.Value switch
+				productModel = query.Availability.Value switch
 				{
 					ProductStatusEnum.Available =>
 						productModel.Where(p => p.IsActive && p.Stock > 0),

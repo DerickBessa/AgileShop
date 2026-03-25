@@ -37,6 +37,7 @@ namespace AgileShop.Controllers
 		}
 
 		[HttpGet("categories")]
+		[HttpGet("categorias")]
 		public async Task<IActionResult> GetAllCategory()
 		{
 			var products = await _repo.GetAllAsync(new ProductQuery());

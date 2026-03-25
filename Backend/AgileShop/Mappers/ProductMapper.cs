@@ -9,9 +9,9 @@ namespace AgileShop.Mappers
 {
     public static class ProductMapper
     {
-        public static ProductDto ToProductDto(this Product productModel)
+        public static ProductResponseDto ToProductDto(this Product productModel)
 		{
-			return new ProductDto
+			return new ProductResponseDto
 			{
 				Id = productModel.Id,
 				Name = productModel.Name,
