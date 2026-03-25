@@ -27,7 +27,7 @@ export interface UpdateProductDto extends CreatedProductDto{
 export interface ProductQuery {
 	name?: string;
   	category?: string;
-  	disponibility?: 0 | 1 | 2;
+  	availability?: 0 | 1 | 2;
   	sortBy?: string;
   	pageNumber?: number;
   	pageSize?: number;

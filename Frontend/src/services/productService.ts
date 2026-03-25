@@ -1,6 +1,6 @@
 import type { CreatedProductDto, Product, ProductQuery, UpdateProductDto } from "../types/product";
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL as string;
 
 const buildParams = (query?: ProductQuery): string => {
   if (!query) return "";
@@ -10,51 +10,35 @@ const buildParams = (query?: ProductQuery): string => {
       params.append(key, String(value));
     }
   });
+
   const str = params.toString();
   return str ? `?${str}` : "";
 };
 
 export const productService = {
-  getAll: async (query?: ProductQuery): Promise<Product[]> => {
-    const response = await fetch(`${API_URL}${buildParams(query)}`);
-    if (!response.ok) throw new Error("Erro ao buscar produtos");
-    return response.json();
-  },
+  getAll: (query?: ProductQuery): Promise<Product[]> =>
+    request<Product[]>(`${API_URL}${buildParams(query)}`),
 
-  getById: async (id: string): Promise<Product> => {
-    const response = await fetch(`${API_URL}/${id}`);
-    if (!response.ok) throw new Error("Produto não encontrado");
-    return response.json();
-  },
+  getById: (id: string): Promise<Product> =>
+    request<Product>(`${API_URL}/${id}`),
 
-  getCategories: async (): Promise<string[]> => {
-    const response = await fetch(`${API_URL}/categories`);
-    if (!response.ok) throw new Error("Erro ao buscar categorias");
-    return response.json();
-  },
+  getCategories: (): Promise<string[]> =>
+    request<string[]>(`${API_URL}/categorias`),
 
-  create: async (dto: CreatedProductDto): Promise<Product> => {
-    const response = await fetch(API_URL, {
+  create: (dto: CreatedProductDto): Promise<Product> =>
+    request<Product>(API_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(dto),
-    });
-    if (!response.ok) throw new Error("Erro ao criar produto");
-    return response.json();
-  },
+    }),
 
-  update: async (id: string, dto: UpdateProductDto): Promise<Product> => {
-    const response = await fetch(`${API_URL}/${id}`, {
+  update: (id: string, dto: UpdateProductDto): Promise<Product> =>
+    request<Product>(`${API_URL}/${id}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(dto),
-    });
-    if (!response.ok) throw new Error("Erro ao atualizar produto");
-    return response.json();
-  },
+    }),
 
-  delete: async (id: string): Promise<void> => {
-    const response = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
-    if (!response.ok) throw new Error("Erro ao deletar produto");
-  },
+  delete: (id: string): Promise<void> =>
+    request<void>(`${API_URL}/${id}`, {
+      method: "DELETE",
+    }),
 };
