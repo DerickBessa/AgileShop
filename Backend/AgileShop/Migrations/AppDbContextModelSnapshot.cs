@@ -54,7 +54,7 @@ namespace AgileShop.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Produtos");
+                    b.ToTable("Products");
                 });
 #pragma warning restore 612, 618
         }

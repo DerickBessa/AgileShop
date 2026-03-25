@@ -20,9 +20,9 @@ namespace AgileShop.DTOs
 		{
 			get
 			{
-				if (Stock == 0) return "Indisponível";
-				if (Stock < 10) return "Baixo";
-				return "Ok";
+				if (Stock == 0) return "unavailable";
+				if (Stock < 10) return "low-stock";
+				return "available";
  			}
 		}
     }
