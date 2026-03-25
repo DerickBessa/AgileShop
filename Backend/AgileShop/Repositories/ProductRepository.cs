@@ -47,12 +47,12 @@ namespace AgileShop.Repositories //Deixei na ordem CRUD
 
 			if (!string.IsNullOrWhiteSpace(query.Name))
 			{
-				productModel = productModel.Where(p => p.Name.Contains(query.Name));
+				productModel = productModel.Where(p => p.Name.ToLower().Contains(query.Name.ToLower()));
 			}
 
 			if (!string.IsNullOrWhiteSpace(query.Category))
 			{
-				productModel = productModel.Where(p => p.Category.Contains(query.Category));
+				productModel = productModel.Where(p => p.Category.ToLower().Contains(query.Category.ToLower()));
 			}
 
 			if (query.Disponibility.HasValue)

@@ -30,10 +30,18 @@ namespace AgileShop.Controllers
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 
-			var product = await _repo.GetAllAsync(query);
-			var productDto = product.Select(s => s.ToProductDto()).ToList();
+			var products = await _repo.GetAllAsync(query);
+			var productDto = products.Select(s => s.ToProductDto()).ToList();
 
 			return Ok(productDto);
+		}
+
+		[HttpGet("categories")]
+		public async Task<IActionResult> GetAllCategory()
+		{
+			var products = await _repo.GetAllAsync(new ProductQuery());
+			var category = products.Select(p => p.Category).Distinct().OrderBy(c => c).ToList();
+			return Ok(category);
 		}
 
 		[HttpGet("{id}")]
@@ -48,14 +56,6 @@ namespace AgileShop.Controllers
 				return NotFound();
 
 			return Ok(product.ToProductDto());
-		}
-
-		[HttpGet("category")]
-		public async Task<IActionResult> GetAllCategory()
-		{
-			var products = await _repo.GetAllAsync(new ProductQuery());
-			var category = products.Select(p => p.Category).Distinct().OrderBy(c => c).ToList;
-			return Ok(category);
 		}
 
 		
@@ -73,7 +73,7 @@ namespace AgileShop.Controllers
 
 			return CreatedAtAction(nameof(GetById), new{id = productModel.Id}, productModel.ToProductDto());
 			
-			//Acho interessante ressaltar esse retorno, eu poderia mandar um status 201, entretanto eu optei por enviar esse padrão
+			//Gostaria de ressaltar o porque utilizei esse retorno, eu poderia mandar somente  um status 201, entretanto eu optei por enviar esse padrão
 			// onde eu passo a rota que eu pego no nameof e ponho o id no final, após isso mostro o JSON que foi criado.
 			// acho interessante para conseguir dar um retorno mais completo no Network, para sistemas maiores esse retorno completo da rota
 			// ajuda a encontrar bugs de forma mais fácil!
@@ -100,9 +100,9 @@ namespace AgileShop.Controllers
 				return BadRequest(ModelState);
 
 
-			var product = await _repo.DeleteAsync(id);
+			var toDeleteProduct = await _repo.DeleteAsync(id);
 
-			if(product == null)
+			if(toDeleteProduct == null)
 				return NotFound();
 			
 			return NoContent();
