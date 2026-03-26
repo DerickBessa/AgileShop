@@ -334,6 +334,32 @@ Cobriria os fluxos principais de ponta a ponta: criar um produto, adicioná-lo a
 
 ---
 
+## 📸 Screenshots
+
+### Catálogo de Produtos — Light Mode
+![Catálogo Light](./screenshots/catalogo-light.png)
+
+### Catálogo de Produtos — Dark Mode
+![Catálogo Dark](./screenshots/catalogo-dark.png)
+
+### Carrinho de Compras
+![Carrinho](./screenshots/carrinho.png)
+
+### Formulário — Novo Produto
+![Novo Produto](./screenshots/modal-criar-vazio.png)
+
+### Formulário — Editar Produto (com preview de imagem)
+![Editar Produto](./screenshots/editar-produto.png)
+
+### Página de Detalhe do Produto
+![Detalhe do Produto](./screenshots/detalhes.png)
+
+### Produtos Similares
+![Produtos Similares](./screenshots/produtos-similares.png)
+
+### Dashboard Analítico
+![Dashboard](./screenshots/dashboard.png)
+
 ## 👨‍💻 Autor
 
 Desenvolvido por **[Derick Bessa](https://github.com/DerickBessa)**
