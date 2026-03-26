@@ -1,23 +1,19 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import { ProductProvider } from './context/ProductContext'
-import { useTheme } from './hooks/useTheme'
 import { BrowserRouter } from "react-router-dom";
-
-
+import { Toaster } from "react-hot-toast";
+import { ProductProvider } from "./context/ProductContext";
+import { AppRoutes } from "./routes";
+import Navbar from "./components/NavBar";
 
 function App() {
-	const { isDark, toggleTheme } = useTheme();
-
-return(
-	<BrowserRouter>
+  return (
+    <BrowserRouter>
       <ProductProvider>
-        <div>App funcionando</div>
+        <Navbar />
+        <AppRoutes />
+        <Toaster position="bottom-right" />
       </ProductProvider>
     </BrowserRouter>
-);
+  );
 }
 
-export default App
+export default App;
