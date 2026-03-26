@@ -11,10 +11,20 @@ import {
   DollarSign,
   CheckCircle,
 } from "lucide-react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Cell,
+} from "recharts";
 import { useProducts } from "../context/ProductContext";
 import type { Product } from "../types/product";
 
-// ─── helpers ─────────────────────────────────────────────────────────────────
+
 
 function formatBRL(value: number) {
   return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -26,7 +36,37 @@ function formatBRLShort(value: number) {
   return formatBRL(value);
 }
 
-// ─── sub-components ──────────────────────────────────────────────────────────
+
+const BAR_COLORS = [
+  "#3B82F6",
+  "#8B5CF6",
+  "#10B981",
+  "#F59E0B",
+  "#EF4444",
+  "#06B6D4",
+];
+
+
+function CustomTooltip({ active, payload, label }: any) {
+  if (!active || !payload?.length) return null;
+  return (
+    <div
+      style={{
+        background: "var(--color-card)",
+        border: "1px solid var(--color-border)",
+        borderRadius: 8,
+        padding: "8px 12px",
+        fontSize: 13,
+      }}
+    >
+      <p style={{ color: "var(--color-text-secondary)", marginBottom: 2 }}>{label}</p>
+      <p style={{ color: "var(--color-text-primary)", fontWeight: 600 }}>
+        {payload[0].value} produto{payload[0].value !== 1 ? "s" : ""}
+      </p>
+    </div>
+  );
+}
+
 
 interface MetricCardProps {
   label: string;
@@ -44,16 +84,19 @@ function MetricCard({ label, value, sub, icon, accent = "default" }: MetricCardP
     danger: "text-[var(--color-danger)]",
   };
 
-  const iconBg: Record<string, string> = {
-    default: "bg-blue-50 dark:bg-blue-950",
-    success: "bg-green-50 dark:bg-green-950",
-    warning: "bg-yellow-50 dark:bg-yellow-950",
-    danger: "bg-red-50 dark:bg-red-950",
-  };
+  const iconBg: Record<string, React.CSSProperties> = {
+  default: { backgroundColor: "color-mix(in srgb, var(--color-primary) 12%, transparent)" },
+  success: { backgroundColor: "color-mix(in srgb, var(--color-success) 12%, transparent)" },
+  warning: { backgroundColor: "color-mix(in srgb, var(--color-warning) 12%, transparent)" },
+  danger:  { backgroundColor: "color-mix(in srgb, var(--color-danger)  12%, transparent)" },
+};
 
   return (
     <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] p-5 flex items-start gap-4 transition-shadow hover:shadow-md">
-      <div className={`rounded-lg p-2.5 ${iconBg[accent]} ${accentStyles[accent]} flex-shrink-0`}>
+     <div
+		className={`rounded-lg p-2.5 flex-shrink-0 ${accentStyles[accent]}`}
+		style={iconBg[accent]}
+		>
         {icon}
       </div>
       <div className="min-w-0">
@@ -100,13 +143,12 @@ function StockBadge({ stockStatus, stock, isActive }: StockBadgeProps) {
   );
 }
 
-// ─── main page ────────────────────────────────────────────────────────────────
+
 
 export default function DashboardPage() {
   const { allProducts } = useProducts();
   const navigate = useNavigate();
 
-  // ── métricas gerais ──────────────────────────────────────────────────────
   const metrics = useMemo(() => {
     const total = allProducts.length;
     const active = allProducts.filter((p) => p.isActive && p.stock > 0).length;
@@ -119,7 +161,7 @@ export default function DashboardPage() {
     return { total, active, lowStock, unavailable, totalStockValue };
   }, [allProducts]);
 
-  // ── produtos por categoria ───────────────────────────────────────────────
+
   const byCategory = useMemo(() => {
     const map = new Map<string, number>();
     allProducts.forEach((p) => {
@@ -127,12 +169,10 @@ export default function DashboardPage() {
     });
     return Array.from(map.entries())
       .sort((a, b) => b[1] - a[1])
-      .slice(0, 6);
+      .slice(0, 6)
+      .map(([name, total]) => ({ name, total }));
   }, [allProducts]);
 
-  const maxCategoryCount = byCategory[0]?.[1] ?? 1;
-
-  // ── estoque baixo / sem estoque ──────────────────────────────────────────
   const criticalProducts = useMemo(
     () =>
       allProducts
@@ -142,7 +182,6 @@ export default function DashboardPage() {
     [allProducts]
   );
 
-  // ── mais caro / mais barato ──────────────────────────────────────────────
   const sorted = useMemo(
     () => [...allProducts].sort((a, b) => a.price - b.price),
     [allProducts]
@@ -150,7 +189,7 @@ export default function DashboardPage() {
   const cheapest = sorted.slice(0, 3);
   const priciest = sorted.slice(-3).reverse();
 
-  // ── se não há produtos ───────────────────────────────────────────────────
+
   if (allProducts.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4 text-[var(--color-text-secondary)]">
@@ -168,7 +207,7 @@ export default function DashboardPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-      {/* header */}
+
       <div className="flex items-center gap-3 mb-8">
         <button
           onClick={() => navigate("/")}
@@ -187,7 +226,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* ── cards de métricas ── */}
+
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <MetricCard
           label="Total de Produtos"
@@ -199,7 +238,7 @@ export default function DashboardPage() {
         <MetricCard
           label="Valor em Estoque"
           value={formatBRLShort(metrics.totalStockValue)}
-          sub="soma de preço × estoque"
+          sub="soma de preço x estoque"
           icon={<DollarSign size={20} />}
           accent="success"
         />
@@ -219,9 +258,10 @@ export default function DashboardPage() {
         />
       </div>
 
-      {/* ── linha 2: categoria + produtos críticos ── */}
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        {/* produtos por categoria */}
+
+
         <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] p-5">
           <div className="flex items-center gap-2 mb-4">
             <Tag size={16} className="text-[var(--color-primary)]" />
@@ -233,28 +273,47 @@ export default function DashboardPage() {
           {byCategory.length === 0 ? (
             <p className="text-sm text-[var(--color-text-secondary)]">Sem categorias.</p>
           ) : (
-            <div className="space-y-3">
-              {byCategory.map(([cat, count]) => (
-                <div key={cat} className="flex items-center gap-3">
-                  <span className="text-xs text-[var(--color-text-secondary)] w-28 flex-shrink-0 truncate">
-                    {cat}
-                  </span>
-                  <div className="flex-1 h-2 bg-[var(--color-border)] rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-[var(--color-primary)] rounded-full transition-all duration-500"
-                      style={{ width: `${(count / maxCategoryCount) * 100}%` }}
+            <ResponsiveContainer width="100%" height={220}>
+              <BarChart
+                data={byCategory}
+                margin={{ top: 4, right: 8, left: -20, bottom: 4 }}
+                barCategoryGap="30%"
+              >
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="var(--color-border)"
+                  vertical={false}
+                />
+                <XAxis
+                  dataKey="name"
+                  tick={{ fontSize: 11, fill: "var(--color-text-secondary)" }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <YAxis
+                  allowDecimals={false}
+                  tick={{ fontSize: 11, fill: "var(--color-text-secondary)" }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <Tooltip
+                  content={<CustomTooltip />}
+                  cursor={{ fill: "var(--color-border)", opacity: 0.4 }}
+                />
+                <Bar dataKey="total" radius={[6, 6, 0, 0]}>
+                  {byCategory.map((_, index) => (
+                    <Cell
+                      key={index}
+                      fill={BAR_COLORS[index % BAR_COLORS.length]}
                     />
-                  </div>
-                  <span className="text-xs font-semibold text-[var(--color-text-primary)] w-6 text-right">
-                    {count}
-                  </span>
-                </div>
-              ))}
-            </div>
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
           )}
         </div>
 
-        {/* produtos críticos */}
+
         <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] p-5">
           <div className="flex items-center gap-2 mb-4">
             <AlertTriangle size={16} className="text-[var(--color-warning)]" />
@@ -294,9 +353,9 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* ── linha 3: mais caros / mais baratos ── */}
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* mais caros */}
+
         <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] p-5">
           <div className="flex items-center gap-2 mb-4">
             <TrendingUp size={16} className="text-[var(--color-success)]" />
@@ -326,7 +385,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* mais baratos */}
+
         <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] p-5">
           <div className="flex items-center gap-2 mb-4">
             <DollarSign size={16} className="text-[var(--color-text-secondary)]" />
