@@ -11,7 +11,7 @@ export interface Product {
 	stockStatus: string;
 }
 
-export interface CreatedProductDto{
+export interface CreatedProductDto {
 	name: string;
 	description?: string;
 	price: number;
@@ -20,15 +20,17 @@ export interface CreatedProductDto{
 	imageUrl?: string;
 }
 
-export interface UpdateProductDto extends CreatedProductDto{
+export interface UpdateProductDto extends CreatedProductDto {
 	isActive: boolean;
 }
 
 export interface ProductQuery {
 	name?: string;
-  	category?: string;
-  	availability?: 0 | 1 | 2;
-  	sortBy?: string;
-  	pageNumber?: number;
-  	pageSize?: number;
+	category?: string;
+	availability?: 0 | 1 | 2;
+	sortBy?: string;
+	pageNumber?: number;
+	pageSize?: number;
+	priceMin?: number;
+	priceMax?: number;
 }
