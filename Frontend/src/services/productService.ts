@@ -1,12 +1,10 @@
 import type { CreatedProductDto, Product, ProductQuery, UpdateProductDto } from "../types/product";
-import {request} from "../helpers/request"
 
 const API_URL = import.meta.env.VITE_API_URL as string;
 
 export const buildParams = (query?: ProductQuery): string => { //tratamento de querys para verificar se existem ou nao filtros aplicados!!
   if (!query) return "";
   const params = new URLSearchParams();
-
   Object.entries(query).forEach(([key, value]) => {
     if (value !== undefined && value !== null && value !== "") {
       params.append(key, String(value));
