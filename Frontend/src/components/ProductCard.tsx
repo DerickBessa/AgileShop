@@ -70,7 +70,7 @@ export function ProductCard({ product, onEdit, onDelete }: ProductCardProps) {
 			>
 
 		<div
-			className="relative w-full bg-[var(--color-bg)] cursor-pointer flex items-center justify-center overflow-hidden"
+			className="relative w-full bg-white cursor-pointer flex items-center justify-center overflow-hidden"
 			style={{ height: 200 }}
 			onClick={goToDetail}
 		>
