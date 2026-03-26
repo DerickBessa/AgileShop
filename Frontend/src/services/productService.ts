@@ -1,4 +1,5 @@
 import type { CreatedProductDto, Product, ProductQuery, UpdateProductDto } from "../types/product";
+import { request } from "../helpers/request";
 
 const API_URL = import.meta.env.VITE_API_URL as string;
 
