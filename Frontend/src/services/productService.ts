@@ -2,7 +2,7 @@ import type { CreatedProductDto, Product, ProductQuery, UpdateProductDto } from 
 
 const API_URL = import.meta.env.VITE_API_URL as string;
 
-const buildParams = (query?: ProductQuery): string => {
+export const buildParams = (query?: ProductQuery): string => { //tratamento de querys para verificar se existem ou nao filtros aplicados!!
   if (!query) return "";
   const params = new URLSearchParams();
   Object.entries(query).forEach(([key, value]) => {

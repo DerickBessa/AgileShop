@@ -3,8 +3,8 @@ import type { CreatedProductDto, Product, ProductQuery, UpdateProductDto } from 
 import { productService } from "../services/productService";
 
 interface ProductContextType {
-  products: Product[];        // filtrados/ordenados/paginados — para exibição
-  allProducts: Product[];     // todos carregados do backend — fonte da verdade
+  products: Product[];    
+  allProducts: Product[];     
   categories: string[];
   loading: boolean;
   error: string | null;
@@ -35,18 +35,17 @@ const DEFAULT_QUERY: ProductQuery = {
 function applyFilters(all: Product[], query: ProductQuery): Product[] {
   let result = [...all];
 
-  // Busca por nome (client-side, instantânea)
+
   if (query.name && query.name.trim() !== "") {
     const term = query.name.trim().toLowerCase();
     result = result.filter(p => p.name.toLowerCase().includes(term));
   }
 
-  // Filtro por categoria
+
   if (query.category && query.category !== "") {
     result = result.filter(p => p.category === query.category);
   }
 
-  // Filtro por disponibilidade: 0=disponíveis, 1=estoque baixo, 2=sem estoque
   if (query.availability !== undefined && query.availability !== null) {
     if (query.availability === 0) {
       result = result.filter(p => p.isActive && p.stock >= 10);
@@ -57,7 +56,7 @@ function applyFilters(all: Product[], query: ProductQuery): Product[] {
     }
   }
 
-  // Filtro por faixa de preço
+
   if (query.priceMin !== undefined) {
     result = result.filter(p => p.price >= query.priceMin!);
   }
@@ -65,7 +64,6 @@ function applyFilters(all: Product[], query: ProductQuery): Product[] {
     result = result.filter(p => p.price <= query.priceMax!);
   }
 
-  // Ordenação
   const sortBy = query.sortBy ?? "newest";
   if (sortBy === "name_asc")   result.sort((a, b) => a.name.localeCompare(b.name));
   if (sortBy === "name_desc")  result.sort((a, b) => b.name.localeCompare(a.name));
@@ -83,10 +81,9 @@ export function ProductProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<string | null>(null);
   const [query, setQueryState] = useState<ProductQuery>(DEFAULT_QUERY);
 
-  // Filtra e ordena no frontend — sem requisição
+
   const filtered = useMemo(() => applyFilters(allProducts, query), [allProducts, query]);
 
-  // Paginação client-side
   const pageSize = query.pageSize ?? PAGE_SIZE;
   const pageNumber = query.pageNumber ?? 1;
   const paginated = useMemo(
@@ -96,7 +93,6 @@ export function ProductProvider({ children }: { children: ReactNode }) {
 
   const hasNextPage = pageNumber * pageSize < filtered.length;
 
-  // Carrega TODOS os produtos de uma vez (sem filtros de busca no backend)
   const fetchProducts = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -115,7 +111,6 @@ export function ProductProvider({ children }: { children: ReactNode }) {
       const data = await productService.getCategories();
       setCategories(data);
     } catch {
-      // silencia erro de categorias
     }
   }, []);
 
@@ -124,7 +119,7 @@ export function ProductProvider({ children }: { children: ReactNode }) {
     setError(null);
     try {
       await productService.create(dto);
-      await fetchProducts(); // recarrega tudo após criação
+      await fetchProducts(); 
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro ao criar produto");
       throw err;
@@ -161,7 +156,7 @@ export function ProductProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  // setQuery agora só atualiza o estado local — sem chamada ao backend
+
   const setQuery = useCallback((newQuery: ProductQuery) => {
     setQueryState({ ...newQuery, pageNumber: 1 });
   }, []);
