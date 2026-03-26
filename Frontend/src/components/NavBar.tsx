@@ -89,7 +89,7 @@ const Navbar = () => {
           />
 
           <img
-            src="/assets/logo.png"
+            src={isDark ? "/assets/logo.png" : "/assets/logo_preta.png"}
             alt="AgileShop"
             className="hidden sm:block h-auto w-[140px] group-hover:opacity-80 transition-opacity hover:border-[var(--color-border)] hover:border-2 hover:rounded-xl"
           />

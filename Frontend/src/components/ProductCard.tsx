@@ -87,7 +87,6 @@ export function ProductCard({ product, onEdit, onDelete }: ProductCardProps) {
 			/>
 			) : null}
 
-
 			<div
 			className="absolute inset-0 flex-col items-center justify-center gap-2 text-[var(--color-text-secondary)]"
 			style={{ display: product.imageUrl ? "none" : "flex" }}
@@ -111,14 +110,12 @@ export function ProductCard({ product, onEdit, onDelete }: ProductCardProps) {
 			{product.category}
 			</span>
 
-
 			<h3
 			className="text-sm font-semibold text-[var(--color-text-primary)] leading-snug cursor-pointer hover:text-[var(--color-primary)] transition-colors line-clamp-2"
 			onClick={goToDetail}
 			>
 			{product.name}
 			</h3>
-
 
 			<div className="mt-1">
 			<p className="text-[var(--color-text-primary)] font-bold leading-none" style={{ fontSize: 22 }}>
@@ -131,19 +128,18 @@ export function ProductCard({ product, onEdit, onDelete }: ProductCardProps) {
 			</p>
 			</div>
 
-
 			<StockLabel product={product} />
 
+			{/* Botão carrinho */}
 			<button
 			onClick={(e) => { e.stopPropagation(); addItem(product); }}
 			disabled={isInactive}
 			className={`
 				mt-2 w-full flex items-center justify-center gap-2
-				py-2 rounded-lg text-sm font-semibold transition-all
-				
+				py-2 rounded-lg text-sm font-semibold transition-all duration-200 active:scale-[0.98]
 				${isInactive
 				? "bg-[var(--color-border)] text-[var(--color-text-secondary)] cursor-not-allowed"
-				: "bg-[var(--color-success)] text-white hover:opacity-90 active:scale-[0.98] hover:opacity-80 hover:bg-[var(--color-card)] hover:border hover:border-[var(--color-success)] hover:transition-colors hover:duration-200"
+				: "bg-[var(--color-success)] text-white hover:brightness-90 hover:shadow-md"
 				}
 			`}
 			>
@@ -152,20 +148,24 @@ export function ProductCard({ product, onEdit, onDelete }: ProductCardProps) {
 			</button>
 
 			<div className="flex gap-2 mt-2">
+			{/* Botão editar */}
 			<button
 				onClick={() => onEdit(product)}
 				className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg
-				bg-[var(--color-primary)] hover:opacity-90 active:scale-[0.98]
-				text-white text-xs font-semibold transition-all cursor-pointer hover:opacity-80 hover:bg-[var(--color-card)] hover:border hover:border-[var(--color-primary)] hover:transition-colors hover:duration-200"
+				bg-[var(--color-primary)] text-white text-xs font-semibold
+				hover:brightness-90 hover:shadow-md active:scale-[0.98]
+				transition-all duration-200 cursor-pointer"
 			>
 				<Pencil size={13} />
 				Editar
 			</button>
+			{/* Botão excluir */}
 			<button
 				onClick={() => onDelete(product)}
 				className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg
-				bg-[var(--color-danger)] hover:opacity-90 active:scale-[0.98]
-				text-white text-xs font-semibold transition-all cursor-pointer hover:opacity-80 hover:bg-[var(--color-card)] hover:border hover:border-[var(--color-danger)] hover:transition-colors hover:duration-200"
+				bg-[var(--color-danger)] text-white text-xs font-semibold
+				hover:brightness-90 hover:shadow-md active:scale-[0.98]
+				transition-all duration-200 cursor-pointer"
 			>
 				<Trash2 size={13} />
 				Excluir
