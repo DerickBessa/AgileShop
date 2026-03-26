@@ -48,7 +48,7 @@ function applyFilters(all: Product[], query: ProductQuery): Product[] {
 
   if (query.availability !== undefined && query.availability !== null) {
     if (query.availability === 0) {
-      result = result.filter(p => p.isActive && p.stock >= 10);
+      result = result.filter(p => p.isActive && p.stock > 0);
     } else if (query.availability === 1) {
       result = result.filter(p => p.isActive && p.stock > 0 && p.stock < 10);
     } else if (query.availability === 2) {
