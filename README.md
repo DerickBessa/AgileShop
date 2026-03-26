@@ -1,247 +1,340 @@
-# 🛍️ AgileShop | Catálogo de Produtos | Product Catalog
+# 🛍️ AgileShop — Catálogo de Produtos
 
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-18+-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
+[![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?style=flat-square&logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
+[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.x-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![SQLite](https://img.shields.io/badge/SQLite-embarcado-003B57?style=flat-square&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
+[![Vitest](https://img.shields.io/badge/Testes-+70%25_cobertura-6E9F18?style=flat-square&logo=vitest&logoColor=white)]()
+
+Aplicação web fullstack de gerenciamento de catálogo de produtos para uma loja virtual. Conta com CRUD completo, carrinho de compras, filtros avançados com slider de preço, dashboard analítico com gráficos, página de detalhe de produto com similares, layout adaptativo (sidebar/colunas), dark mode e cobertura de testes superior a 70%.
 
 ---
 
-### Sobre o Projeto
+## 📋 Índice
 
-Aplicação web fullstack de gerenciamento de catálogo de produtos para uma loja virtual, desenvolvida como desafio técnico para a vaga de Estágio em Desenvolvimento Full Stack na Agilean.
-
-A aplicação permite listar, criar, editar e excluir produtos, com filtros, busca, paginação, dashboard de métricas e suporte a dark mode.
+- Tecnologias
+- Funcionalidades
+- Como Executar
+- Estrutura de Pastas
+- Endpoints da API
+- Testes
+- Decisões Técnicas
 
 ---
 
-### 🚀 Tecnologias Utilizadas
+## 🚀 Tecnologias
 
-#### Backend
-| Tecnologia | Versão | Motivo da Escolha |
+### Backend
+
+| Tecnologia | Versão | Motivo |
 |---|---|---|
-| .NET | 10.0 | Requisito do desafio. LTS com melhorias significativas de performance |
-| Entity Framework Core | 8.x | ORM maduro, Code First com Migrations — ideal para evolução controlada do schema |
-| SQLite | — | Banco embarcado, zero configuração, funciona em qualquer sistema operacional sem instalação adicional |
-| Data Annotations | — | Validações declarativas diretamente nas entidades — rápidas e legíveis |
+| .NET | 10.0 | Requisito do desafio. Alta performance, ecossistema maduro |
+| Entity Framework Core | 8.x | ORM Code First com Migrations — evolução controlada do schema |
+| SQLite | — | Banco embarcado, zero configuração, roda em qualquer OS |
+| Data Annotations | — | Validações declarativas direto nas entidades |
+| xUnit | — | Framework de testes unitários padrão do ecossistema .NET |
 
-#### Frontend
-| Tecnologia | Versão | Motivo da Escolha |
+### Frontend
+
+| Tecnologia | Versão | Motivo |
 |---|---|---|
-| React | 18+ | Requisito do desafio. Biblioteca consolidada e amplamente adotada no mercado |
-| Vite | 5.x | Bundler ultrarrápido, HMR instantâneo — ideal para desenvolvimento ágil |
-| TypeScript | 5.x | Tipagem estática que previne erros em tempo de compilação e melhora a manutenção |
-| TailwindCSS | 3.x | Utilitário CSS com alta produtividade; as classes seguem exatamente o guia visual fornecido |
-| React Hook Form + Zod | — | Validação de formulários performática com schema tipado |
-| Axios | — | Cliente HTTP com interceptors, facilitando tratamento global de erros |
-| Context API | — | Gerenciamento de estado leve e suficiente para a complexidade desta aplicação |
-| react-hot-toast | — | Feedback visual de ações do usuário (criar, editar, excluir) |
+| React | 18+ | Requisito do desafio. Biblioteca consolidada no mercado |
+| Vite | 5.x | Bundler ultrarrápido, HMR instantâneo |
+| TypeScript | 5.x | Tipagem estática, menos bugs em runtime, melhor DX |
+| TailwindCSS | 3.x | Alta produtividade; classes seguem o guia visual fornecido |
+| React Hook Form + Zod | — | Validação performática com schema tipado como source of truth |
+| Axios | — | Cliente HTTP com interceptors para tratamento global de erros |
+| Context API | — | Gerenciamento de estado leve e adequado à complexidade do projeto |
+| Recharts | — | Biblioteca de gráficos para o dashboard analítico |
+| Vitest + Testing Library | — | Testes unitários e de componentes no frontend |
 
 ---
 
-### ⚙️ Como Executar
+## ✅ Funcionalidades
 
-#### Pré-requisitos
+### Catálogo de Produtos
+
+- Grid responsivo com skeleton loading (1 coluna mobile → 2 tablet → 3-4 desktop)
+- Busca por nome com **autocomplete e highlight** do termo digitado na Navbar
+- Filtro por categoria, disponibilidade e ordenação
+- **Filtro de preço com slider duplo interativo** (arrastar handles min/max) + presets rápidos (Até R$500, R$500–R$3k, etc.)
+- Layout adaptativo: em desktop os filtros ficam em uma **sidebar fixa lateral**; em mobile/tablet os filtros aparecem em **linha acima do grid**
+- Paginação com navegação Anterior / Próxima
+
+### Cards de Produto
+
+- Exibição de imagem, nome, preço formatado, categoria e status de estoque
+- Indicador visual de estoque baixo (⚠️ 1–9 unidades)
+- Badge "Indisponível" para produtos com `ativo = false` ou `estoque = 0`
+- Cards com `opacity: 0.6` para produtos inativos
+- Hover com elevação suave (shadow + translate) em todos os cards
+- Clique no card navega para a **página de detalhe do produto**
+
+### Página de Detalhe do Produto
+
+- Layout estilo Amazon: imagem à esquerda, informações à direita
+- Exibe nome, preço, descrição, categoria, estoque, status e data de cadastro
+- Badges de status (Ativo/Inativo, Em estoque/Estoque baixo/Indisponível)
+- Botões de editar, excluir e **Adicionar ao Carrinho** (desabilitado se indisponível)
+- Seção de **Produtos Similares** (mesma categoria, até 4 cards)
+- Fallback visual com ícone para produtos sem imagem
+
+### Carrinho de Compras
+
+- Drawer deslizante pela direita com overlay e blur no fundo
+- Adicionar produto ao carrinho pelo card ou pela página de detalhe
+- Controles de quantidade (+/−) com respeito ao limite de estoque do produto
+- Aviso inline quando o limite de estoque é atingido
+- Remoção de item individual e botão "Limpar" todo o carrinho
+- Totalizador de itens e preço em tempo real
+- Badge com contador de itens no ícone da Navbar (exibe "99+" para valores altos)
+- Fecha ao clicar no overlay ou pressionar `Escape`
+
+### Formulário de Produto (Criar/Editar)
+
+- Modal centralizado com validação via **React Hook Form + Zod**
+- Campos: nome, descrição, preço, estoque, categoria (select com 10 opções + "Outros" com input livre)
+- Validações: nome obrigatório (máx 100), preço > R$0,01, estoque ≥ 0, categoria obrigatória
+- **Preview da imagem em tempo real** com debounce de 500ms ao digitar a URL
+- Fallback visual com ícone `ImageOff` para URLs inválidas
+- Botão "Salvar" com cor e sombra dinâmicas: verde com glow quando o formulário é válido, acinzentado quando inválido ou salvando
+- Toggle ativo/inativo disponível somente na edição
+- Botão "Novo Produto" com animação spring no clique e rotação do ícone `+`
+
+### Exclusão de Produto
+
+- Modal de confirmação exibindo o nome do produto
+- Ação irreversível com mensagem clara ao usuário
+
+### Dashboard Analítico
+
+- Cards de métricas: total de produtos, valor total em estoque, produtos com estoque baixo e indisponíveis
+- **Gráfico de barras** (Recharts) com produtos por categoria, tooltip customizado e cores distintas por barra
+- Tabela de **Atenção ao Estoque**: produtos críticos ordenados por estoque crescente com badges de status
+- Listas dos **3 produtos mais caros** e **3 mais baratos**
+- Estado vazio com CTA para ir ao catálogo quando não há produtos cadastrados
+
+### Interface e UX
+
+- **Logo responsiva**: ícone compacto em mobile, logo horizontal completa (versão clara/escura) em desktop
+- **Dark mode** com alternância via botão na Navbar
+- Hover em todos os elementos interativos (cards, botões, links, inputs, selects)
+- Toast de sucesso animado (entrada com spring, saída com fade) para criação e edição
+- Estados de loading (skeleton grid), erro (mensagem + botão retry) e lista vazia (ícone + mensagem)
+- Scroll bloqueado no `body` enquanto o drawer do carrinho está aberto
+
+---
+
+## ⚙️ Como Executar
+
+### Pré-requisitos
+
 - [.NET 8 SDK](https://dotnet.microsoft.com/download)
 - [Node.js 18+](https://nodejs.org)
 
-#### Backend
+### Backend
 
 ```bash
-cd backend
+cd Backend/AgileShop
 dotnet restore
 dotnet ef database update
 dotnet run
 ```
 
-A API estará disponível em: `http://localhost:5000`  
-Documentação Swagger: `http://localhost:5000/swagger`
+API disponível em: `http://localhost:5266`
+Swagger: `http://localhost:5266/swagger`
 
-#### Frontend
+### Frontend
 
 ```bash
-cd frontend
+cd Frontend
 npm install
 npm run dev
 ```
 
-A aplicação estará disponível em: `http://localhost:5173`
+App disponível em: `http://localhost:5173`
+
+> **Atenção:** inicie o backend antes do frontend para que as chamadas à API funcionem corretamente.
 
 ---
 
-### 📋 Funcionalidades Implementadas
+## 📁 Estrutura de Pastas
 
-- [x] Listagem de produtos em grid responsivo (1 / 2 / 3-4 colunas)
-- [x] Busca por nome
-- [x] Filtro por categoria
-- [x] Filtro por disponibilidade
-- [x] Ordenação por nome, preço e data
-- [x] Cadastro de produto com validação completa
-- [x] Preview de imagem por URL
-- [x] Edição de produto via modal
-- [x] Exclusão com modal de confirmação
-- [x] Indicador visual de estoque baixo (< 10 unidades)
-- [x] Badge "Indisponível" para produtos inativos
-- [x] Toast notifications para feedback de ações
-- [x] Dashboard com métricas (total, valor do estoque, estoque baixo)
-- [x] Paginação na listagem
-- [x] Dark mode
-
----
-
-### 🧱 Estrutura de Pastas
-
-O backend segue o padrão **MVC** nativo do .NET, com uma camada de DTOs para separar o contrato da API da entidade do banco. O frontend adota uma **arquitetura em camadas** com separação entre serviços, estado e apresentação.
 ```
-catalogo-produtos/
-├── backend/
-│   ├── Controllers/        # Endpoints da API REST
-│   ├── Models/             # Entidade Produto
-│   ├── DTOs/               # Objetos de transferência de dados
-│   ├── Data/               # AppDbContext
-│   ├── Migrations/         # Histórico de migrations do EF Core
-│   └── Program.cs
+AgileShop/
+├── Backend/
+│   ├── AgileShop/
+│   │   ├── Controllers/        # Endpoints REST (ProdutosController)
+│   │   ├── Models/             # Entidade Produto
+│   │   ├── DTOs/               # Contratos de entrada/saída da API
+│   │   ├── Data/               # AppDbContext
+│   │   ├── Migrations/         # Histórico de migrations do EF Core
+│   │   └── Program.cs
+│   └── AgileShop.Tests/        # Testes unitários do backend (xUnit)
 │
-└── frontend/
+└── Frontend/
     └── src/
-        ├── components/     # ProductCard, ProductForm, Modal, Dashboard, etc.
-        ├── pages/          # CatalogPage
-        ├── hooks/          # useProdutos, useFilters
-        ├── services/       # api.ts (configuração do Axios)
-        ├── context/        # ProductContext
-        └── types/          # produto.types.ts
+        ├── components/
+        │   ├── ProductCard.tsx         # Card com hover, badges e ações
+        │   ├── ProductGrid.tsx         # Grid com skeleton, erro e estado vazio
+        │   ├── ProductFilters.tsx      # Filtros em linha (mobile/tablet)
+        │   ├── ProductSidebar.tsx      # Sidebar de filtros (desktop)
+        │   ├── PriceRangeFilter.tsx    # Slider duplo de faixa de preço
+        │   ├── ProductForm.tsx         # Modal criar/editar com preview de imagem
+        │   ├── ConfirmModal.tsx        # Modal de confirmação de exclusão
+        │   ├── CartDrawer.tsx          # Drawer do carrinho de compras
+        │   ├── NavBar.tsx              # Navbar com busca, autocomplete e carrinho
+        │   └── SuccessToast.tsx        # Toast animado de sucesso
+        ├── context/
+        │   ├── ProductContext.tsx      # Estado global de produtos + filtragem client-side
+        │   └── CartContext.tsx         # Estado global do carrinho
+        ├── pages/
+        │   ├── ProductsPage.tsx        # Página principal do catálogo
+        │   ├── ProductDetailPage.tsx   # Página de detalhe + similares
+        │   └── DashboardPage.tsx       # Dashboard analítico com gráficos
+        ├── services/
+        │   └── productService.ts       # Chamadas à API + buildParams
+        ├── helpers/
+        │   └── request.ts              # Wrapper do fetch com tratamento de ApiError
+        ├── hooks/
+        │   └── useTheme.ts             # Hook de dark mode
+        ├── types/
+        │   └── product.ts              # Tipos Product, ProductQuery, DTOs
+        └── tests/                      # Testes unitários para as funcionalidades mais importantes do sistema
+            ├── CartContext.test.tsx    # Carrinho: adicionar, remover, limpar, totais e limites de estoque
+            ├── ProductCard.test.tsx    # formatPrice (milhar, centavos) e StockLabel (estados de estoque)
+            ├── productService.test.ts  # buildParams: montagem e sanitização da query string
+            ├── request.test.ts         # Wrapper fetch: respostas ok, erros tipados e ApiError
+            └── setup.ts
 ```
 
-### 🧠 Decisões Técnicas
-
-#### Por que Vite + React e não Next.js?
-Next.js resolve problemas de SSR, SSG e SEO — nenhum deles relevante para um painel administrativo interno sem necessidade de indexação. Usar Next.js aqui seria over-engineering. Optei por Vite por inicialização instantânea, HMR rápido e ausência de overhead desnecessário. Conheço Next.js e o utilizo em outros projetos (portfólio, TáNaLista), mas escolher a ferramenta certa para o contexto é mais importante do que usar a mais sofisticada disponível.
-
-#### Por que SQLite e não SQL Server LocalDB?
-SQLite é um arquivo `.db` embutido no projeto — sem instalação, sem configuração de instância, sem dependência de sistema operacional. Qualquer avaliador consegue clonar o repositório e executar a aplicação imediatamente. SQL Server LocalDB só funciona no Windows e exige configuração adicional, o que aumenta a fricção desnecessariamente num desafio técnico.
-
-#### Por que Context API e não Redux?
-Redux introduz boilerplate significativo para uma aplicação com estado relativamente simples. Context API com hooks customizados (`useProdutos`, `useFilters`) resolve o problema com menos código, mais legibilidade e sem dependências adicionais. Redux seria justificável se houvesse múltiplos domínios de estado complexos e interdependentes.
-
-#### Por que React Hook Form + Zod?
-React Hook Form é não-controlado por padrão, evitando re-renders desnecessários a cada tecla pressionada. Zod garante que o schema de validação seja a fonte única da verdade — o mesmo schema valida o formulário no front e pode ser reutilizado como contrato de tipo TypeScript.
-
-#### Separação de Responsabilidades
-- **Controllers** apenas recebem requisições e delegam para a camada de serviço
-- **DTOs** separam o contrato da API da entidade do banco de dados
-- **Hooks customizados** encapsulam lógica de negócio no frontend, mantendo os componentes focados em renderização
-- **`api.ts`** centraliza a configuração do Axios, incluindo interceptors para tratamento global de erros
-
-#### Principais Desafios
-- Sincronizar os estados de filtro, busca e paginação de forma coesa sem duplicar chamadas à API
-- Garantir que o preview de imagem por URL não quebre o layout em URLs inválidas (tratado com `onError` no `<img>`)
-
-#### O que faria diferente com mais tempo
-- Implementaria uma camada de serviço no backend (`IProductService` / `ProductService`) para desacoplar os controllers da lógica de negócio
-- Adicionaria testes unitários nos endpoints com xUnit e no frontend com Vitest + Testing Library
-- Consideraria React Query para cache e sincronização de estado assíncrono, substituindo o Context API manual
-
 ---
 
----
+## 🔌 Endpoints da API
 
-*Desenvolvido por [Derick Bessa](https://github.com/DerickBessa)*
-
-### About the Project
-
-A fullstack web application for product catalog management built as a technical challenge for a Full Stack Developer internship position at Agilean.
-
-The application supports listing, creating, editing, and deleting products, with filters, search, pagination, a metrics dashboard, and dark mode.
-
----
-
-### 🚀 Tech Stack
-
-#### Backend
-| Technology | Version | Reason |
+| Método | Rota | Descrição |
 |---|---|---|
-| .NET | 8.0 | Required by the challenge. LTS with significant performance improvements |
-| Entity Framework Core | 8.x | Mature ORM with Code First Migrations — ideal for controlled schema evolution |
-| SQLite | — | Embedded database, zero configuration, works on any OS without additional setup |
-| Data Annotations | — | Declarative validations directly on entities — fast and readable |
+| `GET` | `/api/produtos` | Listar produtos (aceita filtros via query string) |
+| `GET` | `/api/produtos/{id}` | Buscar produto por ID |
+| `POST` | `/api/produtos` | Criar novo produto |
+| `PUT` | `/api/produtos/{id}` | Atualizar produto existente |
+| `DELETE` | `/api/produtos/{id}` | Deletar produto |
+| `GET` | `/api/produtos/categorias` | Listar categorias disponíveis |
 
-#### Frontend
-| Technology | Version | Reason |
-|---|---|---|
-| React | 18+ | Required by the challenge. Established and widely adopted library |
-| Vite | 5.x | Ultra-fast bundler with instant HMR — ideal for agile development |
-| TypeScript | 5.x | Static typing that catches errors at compile time and improves maintainability |
-| TailwindCSS | 3.x | High-productivity CSS utility; classes map directly to the provided visual guide |
-| React Hook Form + Zod | — | Performant form validation with a typed schema |
-| Axios | — | HTTP client with interceptors for centralized error handling |
-| Context API | — | Lightweight state management appropriate for this application's complexity |
-| react-hot-toast | — | Visual feedback for user actions (create, edit, delete) |
+**Exemplo com filtros:**
+```
+GET /api/produtos?name=notebook&category=Eletrônicos&pageNumber=1&pageSize=8
+```
+
+> A filtragem por disponibilidade e faixa de preço é aplicada no frontend via `ProductContext`, aproveitando o payload completo já carregado em memória.
 
 ---
 
-### ⚙️ How to Run
+## 🧪 Testes
 
-#### Prerequisites
-- [.NET 8 SDK](https://dotnet.microsoft.com/download)
-- [Node.js 18+](https://nodejs.org)
+Cobertura total superior a **70%**, com testes unitários no backend e no frontend.
 
-#### Backend
+### Backend (xUnit)
 
 ```bash
-cd backend
-dotnet restore
-dotnet ef database update
-dotnet run
+cd Backend/AgileShop.Tests
+dotnet test
 ```
 
-API available at: `http://localhost:5000`  
-Swagger docs: `http://localhost:5000/swagger`
+Cobre controllers e camada de serviço, verificando casos de sucesso, validações e erros esperados nos endpoints.
 
-#### Frontend
+### Frontend (Vitest + Testing Library)
 
 ```bash
-cd frontend
-npm install
-npm run dev
+cd Frontend
+npm run test
 ```
 
-App available at: `http://localhost:5173`
+| Arquivo de teste | O que cobre |
+|---|---|
+| `CartContext.test.tsx` | Adicionar item, incrementar quantidade, limite de estoque, remover, `clearCart`, `totalItems`, `totalPrice`, `updateQuantity` com clamp |
+| `ProductCard.test.tsx` | `formatPrice` (separadores, centavos, milhões), `StockLabel` (em estoque, estoque baixo, sem estoque, inativo) |
+| `productService.test.ts` | Montagem de query string: parâmetros `undefined`, strings vazias, numéricos, valor `0` como válido |
+| `request.test.ts` | Respostas ok, erro com `message`, erro com `title`, erro genérico com status, `ApiError` tipado, método e body passados corretamente |
 
 ---
 
-### 📋 Implemented Features
+## 🧠 Decisões Técnicas
 
-- [x] Product grid listing with responsive layout (1 / 2 / 3-4 columns)
-- [x] Name search
-- [x] Category filter
-- [x] Availability filter
-- [x] Sort by name, price, and date
-- [x] Product creation with full validation
-- [x] Image preview by URL
-- [x] Product editing via modal
-- [x] Delete with confirmation modal
-- [x] Low stock visual indicator (< 10 units)
-- [x] "Unavailable" badge for inactive products
-- [x] Toast notifications for action feedback
-- [x] Dashboard with metrics (total, stock value, low stock count)
-- [x] Pagination
-- [x] Dark mode
+### Por que Vite + React e não Next.js?
+
+Next.js é ótimo para sites que precisam de SEO, páginas estáticas ou carregamento no servidor. Esse projeto é um painel administrativo, não precisa de nada disso. O Vite sobe na hora, tem hot reload instantâneo e não carrega nenhuma complexidade desnecessária. Uso Next.js em outros projetos quando faz sentido, mas escolher a ferramenta certa para o contexto importa mais do que usar a mais sofisticada disponível.
+
+### Por que SQLite e não SQL Server LocalDB?
+
+SQLite é um arquivo `.db` que fica dentro do próprio projeto. Não precisa instalar nada, não precisa configurar nada, qualquer pessoa que clonar o repositório consegue rodar imediatamente. O LocalDB é Windows-only e exige configuração extra, o que cria atrito desnecessário.
+
+### Por que Context API e não Redux?
+
+O estado da aplicação é relativamente simples: uma lista de produtos e um carrinho. Redux resolve bem problemas de escala, mas traz um boilerplate considerável para um projeto desse tamanho. A Context API com `useMemo` e `useCallback` resolve tudo isso com menos código e mais clareza. O `ProductContext` centraliza toda a filtragem em memória via `applyFilters`, evitando chamadas repetidas à API a cada interação de filtro.
+
+### Por que React Hook Form + Zod?
+
+React Hook Form trabalha com campos não-controlados, o que evita re-renders a cada tecla digitada. O Zod define o schema de validação uma única vez, e esse mesmo schema gera os tipos TypeScript via `z.infer`, sem duplicação, sem inconsistência entre validação e tipagem.
+
+### Por que o fetch é centralizado no `request.ts`?
+
+Toda chamada à API passa pelo mesmo wrapper. Isso garante que o header `Content-Type`, o tratamento de erros e o `ApiError` tipado (com `status` + `message`) sejam consistentes em toda a aplicação. Qualquer mudança global nesse comportamento acontece em um único lugar.
+
+### Filtragem client-side vs. server-side
+
+Todos os produtos são carregados uma única vez na memória. Filtrar, ordenar e paginar localmente torna a experiência instantânea, sem spinner a cada mudança de filtro. Para catálogos com muitos produtos essa abordagem não escala, mas a estrutura do `ProductQuery` já está preparada para mover a filtragem para o backend sem grandes refatorações.
+
+### Layout adaptativo: sidebar vs. filtros em linha
+
+Em telas grandes (`lg:`) os filtros ficam numa sidebar lateral permanente com todas as opções visíveis. Em mobile e tablet os mesmos filtros aparecem compactados em linha acima do grid, usando selects em vez de botões. O estado é compartilhado pelo `ProductContext`, então os dois layouts se comportam de forma idêntica.
+
+### Separação de responsabilidades
+
+- **Controllers** recebem a requisição e delegam para a lógica de negócio
+- **DTOs** definem o contrato da API separado da entidade do banco
+- **`request.ts`** centraliza o fetch com tratamento de erros tipado
+- **`buildParams`** isola a montagem da query string, o que facilita testá-la de forma isolada
+- **Custom hooks** (`useCart`, `useProducts`, `useTheme`) encapsulam estado e efeitos colaterais, mantendo os componentes focados apenas em renderização
+
+### Principais desafios
+
+- **Slider duplo de preço:** sincronizar os handles min/max com os presets rápidos sem conflito de estado. Resolvido com `localMin`/`localMax` desacoplados do `query`, que só são commitados no evento `mouseup`
+- **Autocomplete compartilhado:** garantir que a busca na Navbar e o filtro de nome do grid usem o mesmo `query.name` via contexto, sem que um sobrescreva o outro
+- **Preview de imagem:** evitar requisições a cada caractere digitado implementando um debounce de 500ms antes de tentar carregar a URL
 
 ---
 
-### 🧠 Technical Decisions
+## 🚀 Se eu tivesse mais tempo
 
-#### Why Vite + React instead of Next.js?
-Next.js solves SSR, SSG, and SEO problems — none of which are relevant for an internal admin panel with no indexing requirements. Using Next.js here would be over-engineering. I chose Vite for instant startup, fast HMR, and zero unnecessary overhead. I use Next.js in other projects (portfolio, TáNaLista), but choosing the right tool for the context matters more than using the most sophisticated one available.
+### Autenticação e controle de acesso
 
-#### Why SQLite instead of SQL Server LocalDB?
-SQLite is an embedded `.db` file bundled with the project — no installation, no instance configuration, no OS dependency. Any evaluator can clone the repo and run the app immediately. SQL Server LocalDB is Windows-only and requires additional setup, introducing unnecessary friction in a technical challenge.
+Implementaria login com JWT — o token seria armazenado via `httpOnly cookie` e enviado automaticamente em cada requisição. No backend, as rotas de criação, edição e exclusão seriam protegidas por `[Authorize]`. No frontend, haveria um sistema de roles: usuários comuns visualizam o catálogo e compram; administradores acessam o dashboard e gerenciam produtos.
 
-#### Why Context API instead of Redux?
-Redux introduces significant boilerplate for an application with relatively simple state. Context API with custom hooks (`useProdutos`, `useFilters`) solves the problem with less code, better readability, and no extra dependencies. Redux would be justified if there were multiple complex, interdependent state domains.
+### Fluxo de compra completo
 
-#### Separation of Concerns
-- **Controllers** only receive requests and delegate to the service layer
-- **DTOs** separate the API contract from the database entity
-- **Custom hooks** encapsulate business logic on the frontend, keeping components focused on rendering
-- **`api.ts`** centralizes Axios configuration, including interceptors for global error handling
+O carrinho já está implementado, mas o botão "Finalizar pedido" não leva a lugar nenhum ainda. Completaria esse fluxo com uma tela de checkout (endereço + forma de pagamento), geração de um QR Code para pagamento via Pix usando a API do Banco Central, e uma página de confirmação do pedido com o status em tempo real.
+
+### Cálculo de frete
+
+Integraria com a API dos Correios (ou Melhor Envio como alternativa) para calcular o frete com base no CEP do usuário. O usuário informaria o CEP na página do carrinho e receberia as opções disponíveis (PAC, SEDEX, etc.) com prazo e valor antes de finalizar a compra.
+
+### Parcelamento e juros no cartão
+
+Adicionaria na tela de checkout um seletor de parcelas. O cálculo seguiria a fórmula de juros compostos padrão do mercado, exibindo o valor de cada parcela e o total com juros, semelhante ao que lojas como Magazine Luiza e Americanas fazem.
+
+### Camada de serviço no backend
+
+Hoje os controllers têm lógica de negócio direto neles. Criaria uma interface `IProductService` com sua implementação `ProductService` para separar essas responsabilidades, controllers apenas recebem e respondem, a lógica fica no serviço. Isso facilita testes e futuras extensões.
+
+### Testes E2E com Playwright
+
+Cobriria os fluxos principais de ponta a ponta: criar um produto, adicioná-lo ao carrinho, finalizar o pedido. Testes unitários garantem que as peças funcionam; testes E2E garantem que o fluxo completo funciona junto.
 
 ---
 
-*Developed by [Derick Bessa](https://github.com/DerickBessa)*
+## 👨‍💻 Autor
+
+Desenvolvido por **[Derick Bessa](https://github.com/DerickBessa)**
+[LinkedIn](https://linkedin.com/in/derickbessa) · [Portfólio](https://derickbessa.github.io)
