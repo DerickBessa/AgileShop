@@ -3,7 +3,7 @@ import {request} from "../helpers/request"
 
 const API_URL = import.meta.env.VITE_API_URL as string;
 
-const buildParams = (query?: ProductQuery): string => { //tratamento de querys para verificar se existem ou nao filtros aplicados!!
+export const buildParams = (query?: ProductQuery): string => { //tratamento de querys para verificar se existem ou nao filtros aplicados!!
   if (!query) return "";
   const params = new URLSearchParams();
 
