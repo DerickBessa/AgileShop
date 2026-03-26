@@ -6,14 +6,16 @@ import { ProductFilters } from "../components/ProductFilters";
 import { ProductSidebar } from "../components/ProductSidebar";
 import { ProductForm } from "../components/ProductForm";
 import { ConfirmModal } from "../components/ConfirmModal";
+import { SuccessToast } from "../components/SuccessToast";
 import type { Product } from "../types/product";
 
 export function ProductsPage() {
 const { fetchCategories, deleteProduct, hasNextPage, query, nextPage, prevPage } = useProducts();
-
 const [formOpen, setFormOpen] = useState(false);
 const [editingProduct, setEditingProduct] = useState<Product | undefined>(undefined);
 const [deletingProduct, setDeletingProduct] = useState<Product | null>(null);
+const [successMessage, setSuccessMessage] = useState("");
+const [btnPressed, setBtnPressed] = useState(false);
 
 useEffect(() => {
 		fetchCategories();
@@ -29,10 +31,22 @@ const handleCloseForm = () => {
 		setEditingProduct(undefined);
 };
 
+const handleSuccess = (message: string) => {
+		handleCloseForm();
+		setSuccessMessage(message);
+		setTimeout(() => setSuccessMessage(""), 3000);
+};
+
 const handleDeleteConfirm = async () => {
 		if (!deletingProduct) return;
 		await deleteProduct(deletingProduct.id);
 		setDeletingProduct(null);
+};
+
+const handleNewProduct = () => {
+		setBtnPressed(true);
+		setTimeout(() => setBtnPressed(false), 300);
+		setFormOpen(true);
 };
 
 const currentPage = query.pageNumber ?? 1;
@@ -40,8 +54,6 @@ const currentPage = query.pageNumber ?? 1;
 	return (
 		<main className="min-h-screen bg-[var(--color-bg)]">
 		<div className="max-w-7xl mx-auto px-6 py-8">
-
-		
 			<div className="flex items-center justify-between mb-8">
 			<div>
 				<h1 className="text-[var(--color-text-primary)] text-3xl font-extrabold tracking-tight">
@@ -51,29 +63,39 @@ const currentPage = query.pageNumber ?? 1;
 				Gerencie os produtos da sua loja
 				</p>
 			</div>
+
+			{/* Botão Novo Produto com animação */}
 			<button
-				onClick={() => setFormOpen(true)}
-				className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[var(--color-primary)] text-white text-sm font-semibold hover:opacity-80 hover:bg-[var(--color-card)] hover:border hover:border-[var(--color-primary)] hover:transition-colors hover:duration-200 transition-opacity cursor-pointer shadow-sm"
+				onClick={handleNewProduct}
+				style={{
+					transition: "transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.15s ease",
+					transform: btnPressed ? "scale(0.93)" : "scale(1)",
+					boxShadow: btnPressed
+						? "0 1px 4px rgba(0,0,0,0.15)"
+						: "0 4px 14px rgba(59,130,246,0.35)",
+				}}
+				className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[var(--color-primary)] text-white text-sm font-semibold hover:brightness-110 cursor-pointer"
 			>
-				<Plus size={17} />
+				<Plus
+					size={17}
+					style={{
+						transition: "transform 0.3s ease",
+						transform: btnPressed ? "rotate(90deg)" : "rotate(0deg)",
+					}}
+				/>
 				Novo Produto
 			</button>
 			</div>
 
-		
 			<div className="lg:hidden mb-6">
 			<ProductFilters />
 			</div>
 
-		
 			<div className="flex gap-6 items-start">
-
-			
 			<aside className="hidden lg:flex flex-col gap-0 w-64 flex-shrink-0 bg-[var(--color-card)] border border-[var(--color-border)] rounded-xl overflow-hidden">
 				<ProductSidebar />
 			</aside>
 
-			
 			<div className="flex-1 min-w-0">
 				<ProductGrid
 				onEdit={handleEdit}
@@ -104,12 +126,15 @@ const currentPage = query.pageNumber ?? 1;
 				</button>
 				</div>
 			</div>
-
 			</div>
 		</div>
 
+		{successMessage && (
+			<SuccessToast message={successMessage} onClose={() => setSuccessMessage("")} />
+		)}
+
 		{formOpen && (
-			<ProductForm product={editingProduct} onClose={handleCloseForm} />
+			<ProductForm product={editingProduct} onClose={handleCloseForm} onSuccess={handleSuccess} />
 		)}
 
 		{deletingProduct && (
