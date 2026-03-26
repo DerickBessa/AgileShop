@@ -2,7 +2,6 @@ import { createContext, useContext, useState, useCallback } from "react";
 import type { Product } from "../types/product";
 import type { ReactNode } from "react";
 
-// ─── tipos ────────────────────────────────────────────────────────────────────
 
 export interface CartItem {
   product: Product;
@@ -22,7 +21,6 @@ interface CartContextValue {
   closeCart: () => void;
 }
 
-// ─── context ──────────────────────────────────────────────────────────────────
 
 const CartContext = createContext<CartContextValue | null>(null);
 
@@ -85,7 +83,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
   );
 }
 
-// ─── hook ─────────────────────────────────────────────────────────────────────
 
 export function useCart() {
   const ctx = useContext(CartContext);
