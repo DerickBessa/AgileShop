@@ -85,11 +85,11 @@ const Navbar = () => {
             src="/assets/logo_icon.png"
             alt="AgileShop"
             className="block sm:hidden h-12 w-auto group-hover:opacity-80 transition-opacity border-4 border-[var(--color-border)] rounded-xl hover:border-white/30 hover:shadow-md hover:-translate-y-0.5
-        transition-all"
+        	transition-all"
           />
 
           <img
-            src="/assets/logo.png"
+            src={isDark ? "/assets/logo.png" : "/assets/logo_preta.png"}
             alt="AgileShop"
             className="hidden sm:block h-auto w-[140px] group-hover:opacity-80 transition-opacity hover:border-[var(--color-border)] hover:border-2 hover:rounded-xl"
           />
