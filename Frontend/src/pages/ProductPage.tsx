@@ -41,7 +41,7 @@ export function ProductsPage() {
     <main className="min-h-screen bg-[var(--color-bg)]">
       <div className="max-w-7xl mx-auto px-6 py-8">
 
-        {/* Header */}
+    
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-[var(--color-text-primary)] text-3xl font-extrabold tracking-tight">
@@ -53,27 +53,27 @@ export function ProductsPage() {
           </div>
           <button
             onClick={() => setFormOpen(true)}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[var(--color-primary)] text-white text-sm font-semibold hover:opacity-90 transition-opacity cursor-pointer shadow-sm"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[var(--color-primary)] text-white text-sm font-semibold hover:opacity-80 hover:bg-[var(--color-card)] hover:border hover:border-[var(--color-primary)] hover:transition-colors hover:duration-200 transition-opacity cursor-pointer shadow-sm"
           >
             <Plus size={17} />
             Novo Produto
           </button>
         </div>
 
-        {/* Mobile/tablet: barra de filtros no topo */}
+    
         <div className="lg:hidden mb-6">
           <ProductFilters />
         </div>
 
-        {/* Layout principal */}
+    
         <div className="flex gap-6 items-start">
 
-          {/* Sidebar — só desktop */}
+          
           <aside className="hidden lg:flex flex-col gap-0 w-64 flex-shrink-0 bg-[var(--color-card)] border border-[var(--color-border)] rounded-xl overflow-hidden">
             <ProductSidebar />
           </aside>
 
-          {/* Conteúdo */}
+         
           <div className="flex-1 min-w-0">
             <ProductGrid
               onEdit={handleEdit}

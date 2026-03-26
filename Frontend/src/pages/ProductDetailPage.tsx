@@ -17,6 +17,8 @@ import {
 import { productService } from "../services/productService";
 import { ProductCard } from "../components/ProductCard";
 import type { Product } from "../types/product";
+import { ShoppingCart } from "lucide-react";
+import { useCart } from "../context/CartContext";
 
 const stockConfig = {
   available: {
@@ -42,13 +44,15 @@ interface ProductDetailPageProps {
 }
 
 export function ProductDetailPage({ onEdit, onDelete }: ProductDetailPageProps) {
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-  const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [imgError, setImgError] = useState(false);
-  const [similarProducts, setSimilarProducts] = useState<Product[]>([]);
+	const { id } = useParams<{ id: string }>();
+	const navigate = useNavigate();
+	const [product, setProduct] = useState<Product | null>(null);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState<string | null>(null);
+	const [imgError, setImgError] = useState(false);
+	const [similarProducts, setSimilarProducts] = useState<Product[]>([]);
+	const { addItem } = useCart();
+	const isInactive = !product?.isActive || product?.stock === 0;	
 
   useEffect(() => {
     if (!id) return;
@@ -67,51 +71,51 @@ export function ProductDetailPage({ onEdit, onDelete }: ProductDetailPageProps) 
       .finally(() => setLoading(false));
   }, [id]);
 
-  const formattedPrice = product
-    ? new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(product.price)
-    : "";
+  	const formattedPrice = product
+		? new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(product.price)
+		: "";
 
-  const formattedDate = product
-    ? new Intl.DateTimeFormat("pt-BR", { dateStyle: "long" }).format(new Date(product.createdAt))
-    : "";
+  	const formattedDate = product
+		? new Intl.DateTimeFormat("pt-BR", { dateStyle: "long" }).format(new Date(product.createdAt))
+		: "";
 
-  const config =
-    product
-      ? stockConfig[product.stockStatus as keyof typeof stockConfig] ?? stockConfig["unavailable"]
-      : stockConfig["unavailable"];
+  	const config =
+		product
+		? stockConfig[product.stockStatus as keyof typeof stockConfig] ?? stockConfig["unavailable"]
+		: stockConfig["unavailable"];
 
-  if (loading) {
-    return (
-      <main className="min-h-screen bg-[var(--color-bg)] flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4 text-[var(--color-text-secondary)]">
-          <div className="w-10 h-10 border-4 border-[var(--color-primary)] border-t-transparent rounded-full animate-spin" />
-          <span className="text-sm font-medium">Carregando produto...</span>
-        </div>
-      </main>
+  	if (loading) {
+		return (
+		<main className="min-h-screen bg-[var(--color-bg)] flex items-center justify-center">
+			<div className="flex flex-col items-center gap-4 text-[var(--color-text-secondary)]">
+			<div className="w-10 h-10 border-4 border-[var(--color-primary)] border-t-transparent rounded-full animate-spin" />
+			<span className="text-sm font-medium">Carregando produto...</span>
+			</div>
+		</main>
     );
   }
 
-  if (error || !product) {
-    return (
-      <main className="min-h-screen bg-[var(--color-bg)] flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4 text-center px-4">
-          <XCircle size={48} className="text-[var(--color-danger)]" />
-          <p className="text-[var(--color-text-primary)] font-semibold text-lg">
-            {error ?? "Produto não encontrado."}
-          </p>
-          <button
-            onClick={() => navigate("/")}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--color-primary)] text-white text-sm font-semibold hover:opacity-90 transition-opacity cursor-pointer"
-          >
-            <ArrowLeft size={16} />
-            Voltar ao catálogo
-          </button>
-        </div>
-      </main>
-    );
+  	if (error || !product) {
+		return (
+		<main className="min-h-screen bg-[var(--color-bg)] flex items-center justify-center">
+			<div className="flex flex-col items-center gap-4 text-center px-4">
+			<XCircle size={48} className="text-[var(--color-danger)]" />
+			<p className="text-[var(--color-text-primary)] font-semibold text-lg">
+				{error ?? "Produto não encontrado."}
+			</p>
+			<button
+				onClick={() => navigate("/")}
+				className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--color-primary)] text-white text-sm font-semibold hover:opacity-90 transition-opacity cursor-pointer"
+			>
+				<ArrowLeft size={16} />
+				Voltar ao catálogo
+			</button>
+			</div>
+		</main>
+		);
   }
 
-  return (
+ 	return (
     <main className={`min-h-screen bg-[var(--color-bg)] ${!product.isActive ? "opacity-80" : ""}`}>
       <div className="max-w-6xl mx-auto px-6 py-8">
 
@@ -275,6 +279,21 @@ export function ProductDetailPage({ onEdit, onDelete }: ProductDetailPageProps) 
                     Excluir Produto
                   </button>
                 )}
+				<button
+				onClick={() => addItem(product)}
+				disabled={isInactive}
+				className={`
+					flex items-center justify-center gap-2
+					px-6 py-3 rounded-xl text-sm font-semibold transition-all
+					${isInactive
+					? "bg-[var(--color-border)] text-[var(--color-text-secondary)] cursor-not-allowed"
+					: "bg-[var(--color-primary)] text-white hover:opacity-90 active:scale-[0.98]"
+					}
+				`}
+				>
+				<ShoppingCart size={16} />
+				{isInactive ? "Produto Indisponível" : "Adicionar ao Carrinho"}
+				</button>
               </div>
             )}
 

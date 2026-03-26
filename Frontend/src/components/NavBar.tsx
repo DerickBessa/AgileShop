@@ -3,14 +3,20 @@ import { Link } from "react-router-dom";
 import { Moon, Sun, Search, X } from "lucide-react";
 import { useTheme } from "../hooks/useTheme";
 import { useProducts } from "../context/ProductContext";
+import { LayoutDashboard } from "lucide-react";
+import { useLocation } from "react-router-dom";
+import { ShoppingCart } from "lucide-react";
+import { useCart } from "../context/CartContext";
 
 const Navbar = () => {
-  const { isDark, toggleTheme } = useTheme();
-  const { allProducts, query, setQuery } = useProducts();
+	const { totalItems, openCart } = useCart();
+ 
+  	const { isDark, toggleTheme } = useTheme();
+  	const { allProducts, query, setQuery } = useProducts();
 
-  const [inputValue, setInputValue] = useState(query.name ?? "");
-  const [open, setOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  	const [inputValue, setInputValue] = useState(query.name ?? "");
+  	const [open, setOpen] = useState(false);
+  	const containerRef = useRef<HTMLDivElement>(null);
 
 
   useEffect(() => {
@@ -140,6 +146,38 @@ const Navbar = () => {
           )}
         </div>
 
+		<button
+			onClick={openCart}
+			aria-label="Abrir carrinho"
+			className="relative p-2 rounded-lg hover:bg-[var(--color-border)] transition-colors text-[var(--color-text-secondary)]"
+			>
+			<ShoppingCart size={20} />
+				{totalItems > 0 && (
+				<span className="
+					absolute -top-1 -right-1
+					min-w-[18px] h-[18px] px-1
+					bg-[var(--color-primary)] text-white
+					text-[10px] font-bold rounded-full
+					flex items-center justify-center
+					">						
+					{totalItems > 99 ? "99+" : totalItems}
+				</span>
+			)}
+		</button>
+		
+		<Link
+		to="/dashboard"
+		className={`
+			flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors
+			${location.pathname === "/dashboard"
+			? "bg-[var(--color-primary)] text-white"
+			: "text-[var(--color-text-secondary)] hover:bg-[var(--color-border)] hover:text-[var(--color-text-primary)]"
+			}
+		`}
+		>
+		<LayoutDashboard size={16} />
+		<span className="hidden sm:inline">Dashboard</span>
+		</Link>
 
         <button
           onClick={toggleTheme}

@@ -6,6 +6,7 @@ import { ProductForm } from "../components/ProductForm";
 import { ConfirmModal } from "../components/ConfirmModal";
 import { useProducts } from "../context/ProductContext";
 import type { Product } from "../types/product";
+import DashboardPage from "../pages/DashboardPage";
 
 export function AppRoutes() {
   const { deleteProduct } = useProducts();
@@ -42,6 +43,7 @@ export function AppRoutes() {
             />
           }
         />
+		<Route path="/dashboard" element={<DashboardPage />} />
       </Routes>
 
       {formOpen && (
