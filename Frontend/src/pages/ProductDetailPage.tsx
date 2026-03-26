@@ -119,7 +119,6 @@ export function ProductDetailPage({ onEdit, onDelete }: ProductDetailPageProps) 
 		<main className={`min-h-screen bg-[var(--color-bg)] ${!product.isActive ? "opacity-80" : ""}`}>
 		<div className="max-w-6xl mx-auto px-6 py-8">
 
-			{/* Back button */}
 			<button
 			onClick={() => navigate("/")}
 			className="flex items-center gap-2 text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] text-sm font-semibold mb-8 transition-colors cursor-pointer group"
@@ -128,10 +127,8 @@ export function ProductDetailPage({ onEdit, onDelete }: ProductDetailPageProps) 
 			Voltar ao catálogo
 			</button>
 
-			{/* Amazon-style layout: image left, info right */}
 			<div className="flex flex-col lg:flex-row gap-10 items-start">
 
-			{/* ── LEFT: Image column ── */}
 			<div className="w-full lg:w-[520px] flex-shrink-0">
 				{product.imageUrl && !imgError ? (
 				<img
@@ -149,10 +146,8 @@ export function ProductDetailPage({ onEdit, onDelete }: ProductDetailPageProps) 
 				)}
 			</div>
 
-			{/* ── RIGHT: Info column ── */}
 			<div className="flex-1 min-w-0">
 
-				{/* Badges */}
 				<div className="flex flex-wrap items-center gap-2 mb-4">
 				<span className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-[var(--color-text-secondary)]">
 					<Tag size={12} />
@@ -181,15 +176,12 @@ export function ProductDetailPage({ onEdit, onDelete }: ProductDetailPageProps) 
 				)}
 				</div>
 
-				{/* Name */}
 				<h1 className="text-[var(--color-text-primary)] text-2xl md:text-3xl font-bold mb-1 leading-snug">
 				{product.name}
 				</h1>
 
-				{/* Divider */}
 				<hr className="border-[var(--color-border)] my-4" />
 
-				{/* Price */}
 				<p className="text-[var(--color-primary)] text-3xl md:text-4xl font-bold mb-5">
 				{formattedPrice}
 				</p>

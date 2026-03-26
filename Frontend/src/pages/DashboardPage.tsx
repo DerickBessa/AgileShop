@@ -93,7 +93,6 @@ function MetricCard({ label, value, sub, icon, accent = "default" }: MetricCardP
 
 	return (
 		<div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] transition-shadow hover:shadow-md flex items-center gap-3 px-4 py-3 sm:flex-col sm:items-start sm:p-5">
-			{/* Mobile: ícone + valor na mesma linha */}
 			<div className="flex items-center gap-3 flex-shrink-0">
 				<div className={`rounded-lg p-2 flex-shrink-0 ${accentStyles[accent]}`} style={iconBg[accent]}>
 					{icon}
@@ -103,7 +102,6 @@ function MetricCard({ label, value, sub, icon, accent = "default" }: MetricCardP
 				</p>
 			</div>
 
-			{/* Label + sub (sempre visíveis) + valor (só desktop) */}
 			<div className="min-w-0 flex-1">
 				<p className="text-xs font-medium text-[var(--color-text-secondary)] uppercase tracking-wide leading-tight">
 					{label}

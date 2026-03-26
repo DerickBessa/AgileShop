@@ -32,7 +32,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setItems((prev) => {
       const existing = prev.find((i) => i.product.id === product.id);
       if (existing) {
-        // respeita o limite de estoque
         const newQty = Math.min(existing.quantity + 1, product.stock);
         return prev.map((i) =>
           i.product.id === product.id ? { ...i, quantity: newQty } : i
