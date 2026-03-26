@@ -23,3 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 .env
+Backend/**/bin/
+Backend/**/obj/
+Backend/**/*.db-shm
+Backend/**/*.db-wal

@@ -85,7 +85,7 @@ const Navbar = () => {
             src="/assets/logo_icon.png"
             alt="AgileShop"
             className="block sm:hidden h-12 w-auto group-hover:opacity-80 transition-opacity border-4 border-[var(--color-border)] rounded-xl hover:border-white/30 hover:shadow-md hover:-translate-y-0.5
-        transition-all"
+        	transition-all"
           />
 
           <img
