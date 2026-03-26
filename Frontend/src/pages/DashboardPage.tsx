@@ -77,40 +77,47 @@ interface MetricCardProps {
 	}
 
 function MetricCard({ label, value, sub, icon, accent = "default" }: MetricCardProps) {
-const accentStyles: Record<string, string> = {
+	const accentStyles: Record<string, string> = {
 		default: "text-[var(--color-primary)]",
 		success: "text-[var(--color-success)]",
 		warning: "text-[var(--color-warning)]",
 		danger: "text-[var(--color-danger)]",
 	};
 
-const iconBg: Record<string, React.CSSProperties> = {
-	default: { backgroundColor: "color-mix(in srgb, var(--color-primary) 12%, transparent)" },
-	success: { backgroundColor: "color-mix(in srgb, var(--color-success) 12%, transparent)" },
-	warning: { backgroundColor: "color-mix(in srgb, var(--color-warning) 12%, transparent)" },
-	danger:  { backgroundColor: "color-mix(in srgb, var(--color-danger)  12%, transparent)" },
+	const iconBg: Record<string, React.CSSProperties> = {
+		default: { backgroundColor: "color-mix(in srgb, var(--color-primary) 12%, transparent)" },
+		success: { backgroundColor: "color-mix(in srgb, var(--color-success) 12%, transparent)" },
+		warning: { backgroundColor: "color-mix(in srgb, var(--color-warning) 12%, transparent)" },
+		danger:  { backgroundColor: "color-mix(in srgb, var(--color-danger)  12%, transparent)" },
 	};
 
 	return (
-		<div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] p-5 flex items-start gap-4 transition-shadow hover:shadow-md">
-		<div
-			className={`rounded-lg p-2.5 flex-shrink-0 ${accentStyles[accent]}`}
-			style={iconBg[accent]}
-			>
-			{icon}
-		</div>
-		<div className="min-w-0">
-			<p className="text-xs font-medium text-[var(--color-text-secondary)] mb-1 uppercase tracking-wide">
-			{label}
-			</p>
-			<p className={`text-2xl font-bold ${accentStyles[accent]}`}>{value}</p>
-			{sub && (
-			<p className="text-xs text-[var(--color-text-secondary)] mt-0.5">{sub}</p>
-			)}
-		</div>
+		<div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] transition-shadow hover:shadow-md flex items-center gap-3 px-4 py-3 sm:flex-col sm:items-start sm:p-5">
+			{/* Mobile: ícone + valor na mesma linha */}
+			<div className="flex items-center gap-3 flex-shrink-0">
+				<div className={`rounded-lg p-2 flex-shrink-0 ${accentStyles[accent]}`} style={iconBg[accent]}>
+					{icon}
+				</div>
+				<p className={`text-2xl font-bold leading-none sm:hidden ${accentStyles[accent]}`}>
+					{value}
+				</p>
+			</div>
+
+			{/* Label + sub (sempre visíveis) + valor (só desktop) */}
+			<div className="min-w-0 flex-1">
+				<p className="text-xs font-medium text-[var(--color-text-secondary)] uppercase tracking-wide leading-tight">
+					{label}
+				</p>
+				<p className={`hidden sm:block text-2xl font-bold mt-1 ${accentStyles[accent]}`}>
+					{value}
+				</p>
+				{sub && (
+					<p className="text-[11px] text-[var(--color-text-secondary)] mt-0.5 leading-tight">{sub}</p>
+				)}
+			</div>
 		</div>
 	);
-	}
+}
 
 interface StockBadgeProps {
 	stockStatus: Product["stockStatus"];
@@ -119,29 +126,29 @@ interface StockBadgeProps {
 	}
 
 function StockBadge({ stockStatus, stock, isActive }: StockBadgeProps) {
-	if (!isActive || stock === 0) {
-		return (
-		<span className="inline-flex items-center gap-1 rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200 px-2.5 py-0.5 text-xs font-semibold">
-			<XCircle size={11} />
-			Indisponível
-		</span>
-		);
-	}
-	if (stockStatus === "low-stock") {
-		return (
-		<span className="inline-flex items-center gap-1 rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 px-2.5 py-0.5 text-xs font-semibold">
-			<AlertTriangle size={11} />
-			{stock} un.
-		</span>
-		);
-	}
-	return (
-		<span className="inline-flex items-center gap-1 rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 px-2.5 py-0.5 text-xs font-semibold">
-		<CheckCircle size={11} />
-		{stock} un.
-		</span>
-	);
-	}
+  if (!isActive || stock === 0) {
+    return (
+      <span className="inline-flex items-center gap-1 rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200 px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap flex-shrink-0">
+        <XCircle size={11} />
+        Indisponível
+      </span>
+    );
+  }
+  if (stockStatus === "low-stock") {
+    return (
+      <span className="inline-flex items-center gap-1 rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap flex-shrink-0">
+        <AlertTriangle size={11} />
+        {stock} un.
+      </span>
+    );
+  }
+  return (
+    <span className="inline-flex items-center gap-1 rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap flex-shrink-0">
+      <CheckCircle size={11} />
+      {stock} un.
+    </span>
+  );
+}
 
 
 
@@ -208,7 +215,7 @@ const priciest = sorted.slice(-3).reverse();
 	return (
 		<div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
 
-		<div className="flex items-center gap-3 mb-8">
+		<div className="flex items-center gap-3 mb-6">
 			<button
 			onClick={() => navigate("/")}
 			aria-label="Voltar ao catálogo"
@@ -217,7 +224,7 @@ const priciest = sorted.slice(-3).reverse();
 			<ArrowLeft size={18} />
 			</button>
 			<div>
-			<h1 className="text-3xl font-extrabold text-[var(--color-text-primary)]">
+			<h1 className="text-2xl sm:text-3xl font-extrabold text-[var(--color-text-primary)]">
 				Dashboard
 			</h1>
 			<p className="text-sm text-[var(--color-text-secondary)] mt-0.5">
@@ -226,43 +233,41 @@ const priciest = sorted.slice(-3).reverse();
 			</div>
 		</div>
 
-
-		<div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+		<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
 			<MetricCard
 			label="Total de Produtos"
 			value={metrics.total}
 			sub={`${metrics.active} ativos`}
-			icon={<Package size={20} />}
+			icon={<Package size={18} />}
 			accent="default"
 			/>
 			<MetricCard
 			label="Valor em Estoque"
 			value={formatBRLShort(metrics.totalStockValue)}
-			sub="soma de preço x estoque"
-			icon={<DollarSign size={20} />}
+			sub="preço × estoque"
+			icon={<DollarSign size={18} />}
 			accent="success"
 			/>
 			<MetricCard
 			label="Estoque Baixo"
 			value={metrics.lowStock}
-			sub="menos de 10 unidades"
-			icon={<AlertTriangle size={20} />}
+			sub="menos de 10 un."
+			icon={<AlertTriangle size={18} />}
 			accent="warning"
 			/>
 			<MetricCard
 			label="Indisponíveis"
 			value={metrics.unavailable}
 			sub="inativos ou sem estoque"
-			icon={<XCircle size={20} />}
+			icon={<XCircle size={18} />}
 			accent="danger"
 			/>
 		</div>
 
 
-		<div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+		<div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
 
-
-			<div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] p-5">
+			<div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] p-4">
 			<div className="flex items-center gap-2 mb-4">
 				<Tag size={16} className="text-[var(--color-primary)]" />
 				<h2 className="text-sm font-semibold text-[var(--color-text-primary)]">
@@ -273,7 +278,7 @@ const priciest = sorted.slice(-3).reverse();
 			{byCategory.length === 0 ? (
 				<p className="text-sm text-[var(--color-text-secondary)]">Sem categorias.</p>
 			) : (
-				<ResponsiveContainer width="100%" height={220}>
+				<ResponsiveContainer width="100%" height={200}>
 				<BarChart
 					data={byCategory}
 					margin={{ top: 4, right: 8, left: -20, bottom: 4 }}
@@ -286,13 +291,13 @@ const priciest = sorted.slice(-3).reverse();
 					/>
 					<XAxis
 					dataKey="name"
-					tick={{ fontSize: 11, fill: "var(--color-text-secondary)" }}
+					tick={{ fontSize: 10, fill: "var(--color-text-secondary)" }}
 					axisLine={false}
 					tickLine={false}
 					/>
 					<YAxis
 					allowDecimals={false}
-					tick={{ fontSize: 11, fill: "var(--color-text-secondary)" }}
+					tick={{ fontSize: 10, fill: "var(--color-text-secondary)" }}
 					axisLine={false}
 					tickLine={false}
 					/>
@@ -314,7 +319,7 @@ const priciest = sorted.slice(-3).reverse();
 			</div>
 
 
-			<div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] p-5">
+			<div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] p-4">
 			<div className="flex items-center gap-2 mb-4">
 				<AlertTriangle size={16} className="text-[var(--color-warning)]" />
 				<h2 className="text-sm font-semibold text-[var(--color-text-primary)]">
@@ -354,9 +359,9 @@ const priciest = sorted.slice(-3).reverse();
 		</div>
 
 
-		<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+		<div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
 
-			<div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] p-5">
+			<div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] p-4">
 			<div className="flex items-center gap-2 mb-4">
 				<TrendingUp size={16} className="text-[var(--color-success)]" />
 				<h2 className="text-sm font-semibold text-[var(--color-text-primary)]">
@@ -367,7 +372,7 @@ const priciest = sorted.slice(-3).reverse();
 				{priciest.map((p, i) => (
 				<div key={p.id} className="flex items-center justify-between py-2.5 gap-2">
 					<div className="flex items-center gap-3 min-w-0">
-					<span className="text-xs font-bold text-[var(--color-text-secondary)] w-4">
+					<span className="text-xs font-bold text-[var(--color-text-secondary)] w-4 flex-shrink-0">
 						#{i + 1}
 					</span>
 					<div className="min-w-0">
@@ -386,7 +391,7 @@ const priciest = sorted.slice(-3).reverse();
 			</div>
 
 
-			<div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] p-5">
+			<div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] p-4">
 			<div className="flex items-center gap-2 mb-4">
 				<DollarSign size={16} className="text-[var(--color-text-secondary)]" />
 				<h2 className="text-sm font-semibold text-[var(--color-text-primary)]">
@@ -397,7 +402,7 @@ const priciest = sorted.slice(-3).reverse();
 				{cheapest.map((p, i) => (
 				<div key={p.id} className="flex items-center justify-between py-2.5 gap-2">
 					<div className="flex items-center gap-3 min-w-0">
-					<span className="text-xs font-bold text-[var(--color-text-secondary)] w-4">
+					<span className="text-xs font-bold text-[var(--color-text-secondary)] w-4 flex-shrink-0">
 						#{i + 1}
 					</span>
 					<div className="min-w-0">

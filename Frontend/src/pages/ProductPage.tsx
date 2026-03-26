@@ -64,7 +64,6 @@ const currentPage = query.pageNumber ?? 1;
 				</p>
 			</div>
 
-			{/* Botão Novo Produto com animação */}
 			<button
 				onClick={handleNewProduct}
 				style={{

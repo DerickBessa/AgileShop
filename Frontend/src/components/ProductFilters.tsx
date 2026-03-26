@@ -30,21 +30,6 @@ export function ProductFilters() {
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-col sm:flex-row gap-3">
-        <div className="relative flex-1">
-          <Search
-            size={16}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)] pointer-events-none"
-          />
-          <input
-            type="text"
-            placeholder="Buscar produtos..."
-            value={query.name ?? ""}
-            onChange={e => {
-              setQuery({ ...query, name: e.target.value || undefined });
-            }}
-            className={`${inputClass} w-full pl-9`}
-          />
-        </div>
 
         <div className="relative w-full sm:w-auto">
           <LayoutGrid
@@ -89,7 +74,6 @@ export function ProductFilters() {
           </select>
         </div>
 
-        {/* Mobile: select igual aos outros filtros */}
         <div className="relative flex-shrink-0 sm:hidden">
           <Package
             size={15}
@@ -115,7 +99,6 @@ export function ProductFilters() {
           </select>
         </div>
 
-        {/* Desktop: botões originais */}
         <div className="hidden sm:flex rounded-lg border border-[var(--color-border)] flex-shrink-0">
           {AVAILABILITY_OPTIONS.map(opt => {
             const active = currentAvailability === opt.value;
